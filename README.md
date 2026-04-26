@@ -512,7 +512,7 @@ oranges-vs-grapefruit-clasification/
 
 | | |
 |---|---|
-| **Nama** | [Nazwa Yulianti M] |
-| **NIM** | [1237050007] |
+| **Nama** | Nazwa Yulianti M |
+| **NIM** | 1237050007 |
 | **Mata Kuliah** | Machine Learning |
 | **Tugas** | Ujian Tengah Semester (UTS) |
