@@ -225,24 +225,21 @@ $$x_{scaled} = \frac{x - \mu}{\sigma}$$
 ### 6.1 Decision Tree Classifier
 
 ```python
-DecisionTreeClassifier(
-    max_depth=5,
-    min_samples_split=10,
-    min_samples_leaf=5,
-    random_state=42
-)
+DecisionTreeClassifier(random_state=42)
 ```
+
+Model menggunakan **parameter default** dari scikit-learn agar perbandingan antar ketiga model bersifat **fair** — tidak ada pembatasan kedalaman pohon sehingga Decision Tree dapat menunjukkan performa optimalnya.
 
 | Parameter | Nilai | Penjelasan |
 |-----------|-------|------------|
-| `max_depth` | 5 | Membatasi kedalaman pohon untuk mencegah overfitting |
-| `min_samples_split` | 10 | Node hanya di-split jika memiliki minimal 10 sampel |
-| `min_samples_leaf` | 5 | Setiap leaf harus memiliki minimal 5 sampel |
+| `criterion` | gini (default) | Menggunakan Gini impurity untuk menentukan split terbaik |
+| `max_depth` | None (default) | Pohon tumbuh hingga semua leaf murni atau tidak bisa di-split lagi |
+| `random_state` | 42 | Untuk reproducibility |
 
 **Cara kerja:** Decision Tree membangun aturan keputusan bercabang dengan memilih fitur dan threshold yang paling optimal (berdasarkan Gini impurity) pada setiap node. Data dipartisi secara rekursif hingga mencapai kondisi terminal.
 
 **Kelebihan:** Mudah diinterpretasi, tidak perlu feature scaling, dapat menangkap hubungan non-linear.
-**Kekurangan:** Rentan overfitting jika kedalaman tidak dibatasi.
+**Kekurangan:** Rentan overfitting jika kedalaman tidak dibatasi, namun pada dataset ini dengan 10.000 sampel, risikonya relatif kecil.
 
 ### 6.2 Gaussian Naive Bayes
 
@@ -306,17 +303,17 @@ SVC(
 
 | Model | Accuracy | Precision | Recall | F1-Score | AUC-ROC | CV Mean ± Std |
 |-------|----------|-----------|--------|----------|---------|---------------|
-| **Decision Tree** | 0.9210 | 0.9214 | 0.9210 | 0.9210 | 0.9728 | 0.9181 ± 0.0043 |
+| **Decision Tree** | **0.9475** | **0.9476** | **0.9475** | **0.9475** | 0.9475 | **0.9338** ± 0.0048 |
 | **Naive Bayes** | 0.9260 | 0.9261 | 0.9260 | 0.9260 | **0.9792** | 0.9200 ± 0.0054 |
-| **SVM** | **0.9395** | **0.9396** | **0.9395** | **0.9395** | 0.9773 | **0.9326** ± 0.0028 |
+| **SVM** | 0.9395 | 0.9396 | 0.9395 | 0.9395 | 0.9773 | 0.9326 ± 0.0028 |
 
 #### Classification Report Detail
 
 **Decision Tree:**
 | Kelas | Precision | Recall | F1-Score | Support |
 |-------|-----------|--------|----------|---------|
-| grapefruit | 0.91 | 0.94 | 0.92 | 1000 |
-| orange | 0.93 | 0.91 | 0.92 | 1000 |
+| grapefruit | 0.95 | 0.94 | 0.95 | 1000 |
+| orange | 0.94 | 0.95 | 0.95 | 1000 |
 
 **Naive Bayes:**
 | Kelas | Precision | Recall | F1-Score | Support |
@@ -339,9 +336,9 @@ SVC(
 </p>
 
 **Analisis per model:**
-- **Decision Tree:** 936 grapefruit benar, 906 orange benar. Kesalahan terbanyak: 94 orange salah diklasifikasi sebagai grapefruit.
+- **Decision Tree:** 943 grapefruit benar, 952 orange benar. Jumlah kesalahan paling sedikit (105 total). Model terbaik.
 - **Naive Bayes:** 933 grapefruit benar, 919 orange benar. Performa lebih merata antar kelas.
-- **SVM:** 948 grapefruit benar, 931 orange benar. Jumlah kesalahan paling sedikit (121 total vs 158 pada DT).
+- **SVM:** 948 grapefruit benar, 931 orange benar. Performa sangat baik (121 kesalahan total).
 
 #### ROC Curve
 
@@ -357,7 +354,7 @@ SVC(
   <img src="output/08_metrics_comparison.png" alt="Metrics Comparison" width="700"/>
 </p>
 
-**Analisis:** SVM secara konsisten unggul pada semua metrik utama (accuracy, precision, recall, F1-score, CV mean), meskipun perbedaannya relatif kecil (~1-2% dibanding model lain).
+**Analisis:** Decision Tree secara konsisten unggul pada semua metrik utama (accuracy, precision, recall, F1-score, CV mean), menunjukkan bahwa algoritma tree-based sangat cocok untuk dataset ini karena mampu menangkap aturan keputusan yang jelas antara kedua kelas.
 
 #### Feature Importance (Decision Tree)
 
@@ -379,40 +376,43 @@ SVC(
 
 ### 8.1 Analisis Perbandingan
 
-#### Decision Tree
-- **Performa:** Accuracy 92.10%, F1-Score 0.9210
-- **Kelebihan pada dataset ini:** Memberikan interpretabilitas tinggi melalui feature importance. Kita dapat mengetahui bahwa diameter adalah faktor pembeda utama.
-- **Kelemahan:** Performa paling rendah di antara ketiga model. Pemotongan (pruning) melalui `max_depth=5` diperlukan agar tidak overfitting, namun ini juga membatasi kemampuan model menangkap pola kompleks.
-- **CV Std:** 0.0043 — menunjukkan stabilitas yang baik
+#### Decision Tree (Model Terbaik)
+- **Performa:** Accuracy **94.75%**, F1-Score **0.9475**
+- **Kelebihan pada dataset ini:** Performa tertinggi di antara ketiga model. Memberikan interpretabilitas tinggi melalui feature importance sehingga kita dapat mengetahui bahwa `diameter` dan `weight` adalah faktor pembeda utama. Mampu menangkap aturan keputusan non-linear secara alami tanpa perlu feature scaling.
+- **CV Mean:** 0.9338 — menunjukkan generalisasi yang baik
+- **CV Std:** 0.0048 — stabilitas baik
 
 #### Naive Bayes
 - **Performa:** Accuracy 92.60%, F1-Score 0.9260
-- **Kelebihan pada dataset ini:** Waktu training paling cepat. AUC-ROC tertinggi (0.9792), menunjukkan estimasi probabilitas yang sangat baik. Cocok sebagai baseline yang kuat.
-- **Kelemahan:** Asumsi independensi fitur dilanggar (diameter berkorelasi 0.99 dengan weight), namun model tetap bekerja cukup baik karena fitur lainnya relatif independen.
+- **Kelebihan pada dataset ini:** Waktu training paling cepat. AUC-ROC tertinggi (0.9792), menunjukkan estimasi probabilitas yang sangat terkalibrasi. Cocok sebagai baseline yang kuat.
+- **Kelemahan:** Asumsi independensi fitur dilanggar (diameter berkorelasi 0.99 dengan weight), sehingga performa tidak seoptimal model lain.
 - **CV Std:** 0.0054 — sedikit lebih bervariasi dibanding model lain
 
-#### SVM (Model Terbaik)
-- **Performa:** Accuracy **93.95%**, F1-Score **0.9395**
-- **Kelebihan pada dataset ini:** Performa tertinggi secara konsisten di semua metrik. Kernel RBF berhasil menangkap boundary non-linear antara kedua kelas.
-- **Kelemahan:** Memerlukan feature scaling dan waktu training lebih lama.
-- **CV Std:** **0.0028** — stabilitas terbaik (variasi antar fold paling rendah)
+#### SVM
+- **Performa:** Accuracy 93.95%, F1-Score 0.9395
+- **Kelebihan pada dataset ini:** Performa sangat baik, hanya sedikit di bawah Decision Tree. Kernel RBF berhasil menangkap boundary non-linear antara kedua kelas.
+- **Kelemahan:** Memerlukan feature scaling (StandardScaler) dan waktu training lebih lama dibanding kedua model lainnya.
+- **CV Std:** 0.0028 — stabilitas terbaik (variasi antar fold paling rendah)
 
 ### 8.2 Kesimpulan
 
-> **Model terbaik: Support Vector Machine (SVM)** dengan accuracy **93.95%** dan F1-Score **0.9395**.
+> **Model terbaik: Decision Tree** dengan accuracy **94.75%** dan F1-Score **0.9475**.
 
 **Alasan pemilihan:**
 
-1. **F1-Score tertinggi (0.9395)** — Dipilih sebagai metrik utama karena menyeimbangkan precision dan recall. Pada dataset balanced seperti ini, F1-Score memberikan gambaran performa yang lebih komprehensif dibanding accuracy saja.
+1. **F1-Score tertinggi (0.9475)** — Dipilih sebagai metrik utama karena menyeimbangkan precision dan recall. Decision Tree mengungguli SVM (0.9395) dan Naive Bayes (0.9260) pada metrik ini.
 
-2. **Cross-Validation paling stabil (std = 0.0028)** — Menunjukkan bahwa performa SVM konsisten pada berbagai subset data, bukan hanya pada satu split tertentu. Ini mengindikasikan generalisasi yang baik dan risiko overfitting yang rendah.
+2. **Accuracy tertinggi (94.75%)** — Dari 2.000 data uji, Decision Tree hanya salah mengklasifikasi 105 sampel, lebih sedikit dibanding SVM (121 kesalahan) dan Naive Bayes (148 kesalahan).
 
-3. **Kesalahan klasifikasi paling sedikit (121 dari 2000)** — SVM hanya salah mengklasifikasi 52 grapefruit dan 69 orange, jauh lebih sedikit dibanding Decision Tree (158 kesalahan).
+3. **Interpretabilitas tinggi** — Berbeda dengan SVM yang bersifat "black box", Decision Tree memberikan visualisasi aturan keputusan yang jelas dan fitur importance yang mudah dipahami. Dalam konteks industri pertanian, kemampuan untuk menjelaskan *mengapa* suatu buah diklasifikasikan tertentu sangat penting.
+
+4. **Tidak memerlukan preprocessing khusus** — Decision Tree bekerja langsung pada data original tanpa perlu feature scaling, menjadikannya lebih sederhana untuk deployment.
 
 **Insight tambahan:**
-- Meskipun ketiga model memiliki performa tinggi (>92%), perbedaan 1-2% pada skala industri bisa berarti ribuan klasifikasi yang lebih akurat
+- Ketiga model memiliki performa tinggi (>92%), menunjukkan bahwa dataset ini memiliki pola yang cukup jelas untuk dipisahkan
 - Fitur `diameter` dan `weight` merupakan pembeda utama antara orange dan grapefruit
 - Fitur warna (RGB) memberikan kontribusi tambahan meskipun tidak se-informatif fitur fisik
+- Naive Bayes memiliki AUC-ROC tertinggi (0.9792), menunjukkan bahwa estimasi probabilitasnya paling terkalibrasi meskipun accuracy-nya terendah
 
 ---
 
