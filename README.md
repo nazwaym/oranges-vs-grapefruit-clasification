@@ -18,45 +18,44 @@
 
 ## Daftar Isi
 
-1. [Pendahuluan](#1-pendahuluan)
-2. [Dataset](#2-dataset)
-3. [Tahap 1 — Data Loading & Exploration](#3-tahap-1--data-loading--exploration)
-4. [Tahap 2 — Exploratory Data Analysis](#4-tahap-2--exploratory-data-analysis-eda)
-5. [Tahap 3 — Data Preprocessing](#5-tahap-3--data-preprocessing)
-6. [Tahap 4 — Model Training](#6-tahap-4--model-training)
-7. [Tahap 5 — Evaluasi Model](#7-tahap-5--evaluasi-model)
-8. [Tahap 6 — Perbandingan & Kesimpulan](#8-tahap-6--perbandingan--kesimpulan)
-9. [Cara Menjalankan Program](#9-cara-menjalankan-program)
-10. [Struktur Proyek](#10-struktur-proyek)
-11. [Teknologi yang Digunakan](#11-teknologi-yang-digunakan)
-12. [Author](#12-author)
+- [Project Overview](#project-overview)
+- [Methodology](#methodology)
+- [Dataset Architecture](#dataset-architecture)
+- [Data Pipeline](#data-pipeline)
+- [Model Implementation](#model-implementation)
+- [Performance Evaluation](#performance-evaluation)
+- [Comparative Analysis](#comparative-analysis)
+- [Installation & Usage](#installation--usage)
+- [Project Structure](#project-structure)
+- [System Architecture](#system-architecture)
+- [Author](#author)
 
 ---
 
-## 1. Pendahuluan
+## Project Overview
 
-### 1.1 Latar Belakang
+Proyek ini merupakan sistem klasifikasi berbasis Machine Learning untuk membedakan kategori buah antara **Orange** dan **Grapefruit**. Menggunakan dataset karakteristik fisik (diameter, berat) dan fitur warna (RGB), sistem ini membandingkan tiga arsitektur model berbeda untuk menentukan akurasi prediksi tertinggi dalam skenario industri klasifikasi pangan otomatis.
 
-Dalam dunia pertanian dan industri pangan, kemampuan untuk mengidentifikasi jenis buah secara otomatis sangat penting untuk proses sortasi dan quality control. Jeruk (orange) dan grapefruit memiliki tampilan fisik yang mirip, namun dapat dibedakan melalui karakteristik terukur seperti diameter, berat, dan warna.
+### Core Algorithms
 
-Proyek ini mengimplementasikan tiga algoritma klasifikasi supervised learning yang telah dipelajari untuk menyelesaikan masalah binary classification tersebut:
+| Algoritma | Kategori | Keunggulan |
+|-----------|----------|------------|
+| **Decision Tree** | Tree-based | Interpretabilitas tinggi & mampu menangkap aturan keputusan non-linear. |
+| **Naive Bayes** | Probabilistic | Komputasi ringan & sangat cepat untuk klasifikasi probabilistik. |
+| **SVM (RBF Kernel)** | Kernel-based | Robust terhadap dimensionalitas tinggi & optimal dalam pemisahan margin. |
 
-| No | Algoritma | Kategori | Pendekatan |
-|----|-----------|----------|------------|
-| 1 | **Decision Tree** | Tree-based | Membuat aturan keputusan bercabang berdasarkan fitur yang paling informatif |
-| 2 | **Naive Bayes** | Probabilistic | Menghitung probabilitas kelas menggunakan Teorema Bayes dengan asumsi independensi fitur |
-| 3 | **SVM** | Kernel-based | Mencari hyperplane optimal yang memisahkan dua kelas dengan margin maksimal |
+## Methodology
 
-### 1.2 Tujuan
-
-1. Membangun pipeline klasifikasi end-to-end (dari data loading hingga evaluasi)
-2. Membandingkan performa tiga model pada dataset yang sama
-3. Menentukan model terbaik berdasarkan metrik evaluasi yang komprehensif
-4. Menganalisis karakteristik yang paling berpengaruh dalam membedakan kedua buah
+Implementasi proyek ini mengikuti *standard data science pipeline* yang mencakup:
+*   **Automated Data Loading**: Sistem pemuatan data modular dengan validasi integritas schema.
+*   **Exploratory Data Analysis (EDA)**: Visualisasi statistik terpadu untuk identifikasi pola fitur.
+*   **Advanced Preprocessing**: Transformasi data terstandarisasi, termasuk label encoding dan feature scaling (StandardScaler).
+*   **Multi-Model Training**: Pelatihan paralel tiga algoritma berbeda dengan parameter yang dioptimasi.
+*   **Comprehensive Evaluation**: Pengukuran performa menggunakan metrik industri (Accuracy, F1-Score, AUC-ROC) dan visualisasi Confusion Matrix.
 
 ---
 
-## 2. Dataset
+## Dataset Architecture
 
 - **Sumber** : [Kaggle — Oranges vs. Grapefruit](https://www.kaggle.com/datasets/joshmcadams/oranges-vs-grapefruit)
 - **Jumlah Data** : 10.000 sampel
@@ -90,7 +89,9 @@ Proyek ini mengimplementasikan tiga algoritma klasifikasi supervised learning ya
 
 ---
 
-## 3. Tahap 1 — Data Loading & Exploration
+## Data Pipeline
+
+### Tahap 1 — Data Loading & Exploration
 
 > **File:** `src/data_loader.py`
 
@@ -111,7 +112,7 @@ Data dalam kondisi baik dan siap untuk tahap selanjutnya. Tidak diperlukan pembe
 
 ---
 
-## 4. Tahap 2 — Exploratory Data Analysis (EDA)
+### Tahap 2 — Exploratory Data Analysis (EDA)
 
 > **File:** `src/eda.py`
 
@@ -174,7 +175,7 @@ EDA bertujuan untuk memahami pola, distribusi, dan hubungan antar fitur sebelum 
 
 ---
 
-## 5. Tahap 3 — Data Preprocessing
+### Tahap 3 — Data Preprocessing
 
 > **File:** `src/preprocessing.py`
 
@@ -218,7 +219,9 @@ $$x_{scaled} = \frac{x - \mu}{\sigma}$$
 
 ---
 
-## 6. Tahap 4 — Model Training
+## Model Implementation
+
+### Tahap 4 — Model Training
 
 > **File:** `src/models.py`
 
@@ -282,7 +285,9 @@ SVC(
 
 ---
 
-## 7. Tahap 5 — Evaluasi Model
+## Performance Evaluation
+
+### Tahap 5 — Evaluasi Model
 
 > **File:** `src/evaluation.py`
 
@@ -372,7 +377,9 @@ SVC(
 
 ---
 
-## 8. Tahap 6 — Perbandingan & Kesimpulan
+## Comparative Analysis
+
+### Tahap 6 — Perbandingan & Kesimpulan
 
 ### 8.1 Analisis Perbandingan
 
@@ -416,7 +423,7 @@ SVC(
 
 ---
 
-## 9. Cara Menjalankan Program
+## Installation & Usage
 
 ### Prerequisites
 
@@ -450,7 +457,7 @@ Program akan menghasilkan:
 
 ---
 
-## 10. Struktur Proyek
+## Project Structure
 
 ```
 oranges-vs-grapefruit-clasification/
@@ -489,7 +496,7 @@ oranges-vs-grapefruit-clasification/
 
 ---
 
-## 11. Teknologi yang Digunakan
+## System Architecture
 
 | Library | Versi | Fungsi |
 |---------|-------|--------|
