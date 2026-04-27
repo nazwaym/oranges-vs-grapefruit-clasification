@@ -34,7 +34,7 @@
 
 ## Project Overview
 
-Proyek ini merupakan sistem klasifikasi berbasis Machine Learning untuk membedakan kategori buah antara **Orange** dan **Grapefruit**. Menggunakan dataset karakteristik fisik (diameter, berat) dan fitur warna (RGB), sistem ini membandingkan tiga arsitektur model berbeda untuk menentukan akurasi prediksi tertinggi dalam skenario industri klasifikasi pangan otomatis.
+Proyek ini merupakan sistem klasifikasi berbasis Machine Learning untuk membedakan kategori buah antara **Orange** dan **Grapefruit**. Menggunakan dataset karakteristik fisik (diameter, berat) dan fitur warna (RGB), sistem ini membandingkan tiga arsitektur model berbeda untuk menentukan akurasi prediksi tertinggi dalam klasifikasi pangan otomatis.
 
 ### Core Algorithms
 
